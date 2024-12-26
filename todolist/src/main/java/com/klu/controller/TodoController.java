@@ -29,16 +29,15 @@ public class TodoController {
     public TodoList updateTodo(@PathVariable String id, @RequestBody TodoList updatedTodo) {
         return todoRepository.findById(id)
                 .map(todo -> {
-                    todo.setTitle(updatedTodo.getTitle()); // Ensure getTitle() exists
+                    todo.setTitle(updatedTodo.getTitle());
                     todo.setCompleted(updatedTodo.isCompleted());
                     return todoRepository.save(todo);
                 })
                 .orElseThrow(() -> new RuntimeException("Todo not found with id: " + id));
     }
 
-
     @DeleteMapping("/{id}")
-    public void deleteTodo(@PathVariable Long id) {
+    public void deleteTodo(@PathVariable String id) {
         if (todoRepository.existsById(id)) {
             todoRepository.deleteById(id);
         } else {
