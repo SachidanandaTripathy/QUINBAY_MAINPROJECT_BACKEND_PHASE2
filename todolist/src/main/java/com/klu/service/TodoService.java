@@ -30,7 +30,7 @@ public class TodoService {
         Optional<TodoList> existingTodo = todoRepository.findById(id);
         if (existingTodo.isPresent()) {
             TodoList updatedTodo = existingTodo.get();
-            updatedTodo.setTask(todo.getTask());
+            updatedTodo.setTask(todo.getTask()); // Keep the task content intact
             updatedTodo.setCompleted(todo.isCompleted());
             return todoRepository.save(updatedTodo);
         } else {

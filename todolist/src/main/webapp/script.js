@@ -90,7 +90,7 @@ async function toggleTodoCompletion(todoId, todoCard) {
         await fetch(`${API_URL}/${todoId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ completed: isCompleted }),
+            body: JSON.stringify({ completed: isCompleted, task: todoCard.querySelector(".todo-text").textContent }), // Preserve the task content
         });
 
         todoCard.classList.toggle("completed");
