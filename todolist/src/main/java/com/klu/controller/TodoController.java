@@ -1,47 +1,45 @@
 package com.klu.controller;
 
 import com.klu.model.TodoList;
-import com.klu.repository.TodoRepository;
+import com.klu.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/todos")
-@CrossOrigin(origins = "http://localhost:8081")
+@RequestMapping("/todos")
 public class TodoController {
 
     @Autowired
-    private TodoRepository todoRepository;
+    private TodoService todoService;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public TodoList addTodo(@RequestBody TodoList todo) {
+        return todoService.createTodo(todo);
+    }
 
     @GetMapping
     public List<TodoList> getAllTodos() {
-        return todoRepository.findAll();
+        return todoService.getAllTodos();
     }
 
-    @PostMapping
-    public TodoList createTodo(@RequestBody TodoList todo) {
-        return todoRepository.save(todo);
+    @GetMapping("/{id}")
+    public Optional<TodoList> getTodoById(@PathVariable String id) {
+        return todoService.getTodoById(id);
     }
 
     @PutMapping("/{id}")
-    public TodoList updateTodo(@PathVariable String id, @RequestBody TodoList updatedTodo) {
-        return todoRepository.findById(id)
-                .map(todo -> {
-                    todo.setTitle(updatedTodo.getTitle());
-                    todo.setCompleted(updatedTodo.isCompleted());
-                    return todoRepository.save(todo);
-                })
-                .orElseThrow(() -> new RuntimeException("Todo not found with id: " + id));
+    public TodoList updateTodo(@PathVariable String id, @RequestBody TodoList todo) {
+        return todoService.updateTodo(id, todo);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTodo(@PathVariable String id) {
-        if (todoRepository.existsById(id)) {
-            todoRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Todo not found with id: " + id);
-        }
+        todoService.deleteTodo(id);
     }
 }

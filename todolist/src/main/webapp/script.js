@@ -7,7 +7,7 @@ const completedCount = document.getElementById("completed-count");
 let completedTodos = 0;
 let totalTodos = 0;
 
-const API_URL = "http://localhost:8081/api/todos";
+const API_URL = "http://localhost:8081/todos";
 
 window.onload = async () => {
     await fetchTodos();
@@ -30,13 +30,13 @@ async function fetchTodos() {
 }
 
 addBtn.addEventListener("click", async () => {
-    const todoText = todoInput.value.trim();
-    if (todoText) {
+    const todoWork = todoInput.value.trim();
+    if (todoWork) {
         try {
             const response = await fetch(API_URL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: todoText, completed: false }),
+                body: JSON.stringify({ task: todoWork, completed: false }),
             });
             const newTodo = await response.json();
             createTodoCard(newTodo);
@@ -57,7 +57,7 @@ function createTodoCard(todo) {
 
     const todoText = document.createElement("p");
     todoText.classList.add("todo-text");
-    todoText.textContent = todo.text;
+    todoText.textContent = todo.task;
 
     const actionButtons = document.createElement("div");
     actionButtons.classList.add("action-buttons");

@@ -2,13 +2,9 @@ package com.klu.repository;
 
 import com.klu.model.TodoList;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+@Repository
+public interface TodoRepository extends MongoRepository<TodoList, String> {
 
-public interface TodoRepository extends MongoRepository<TodoList,String> {
-    boolean existsById(Long id);
-
-    void deleteById(Long id);
-
-    Optional<Object> findById(Long id);
 }
